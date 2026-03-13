@@ -6,12 +6,36 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		1F737CF92F5677FE005F07F1 /* UnityFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FA635332F19DB87002EAA87 /* UnityFramework.framework */; };
+		1F737CFA2F5677FE005F07F1 /* UnityFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1FA635332F19DB87002EAA87 /* UnityFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		320515379AA98BF063C500EF /* libPods-SmartChair.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 397D29DB1815040CBD241333 /* libPods-SmartChair.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		1F737CFB2F5677FF005F07F1 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				1F737CFA2F5677FE005F07F1 /* UnityFramework.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		1FA635332F19DB87002EAA87 /* UnityFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UnityFramework.framework; sourceTree = "<group>"; };
 		1FDCDE9E2EC57E9600CD6056 /* SmartChair.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmartChair.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		397D29DB1815040CBD241333 /* libPods-SmartChair.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SmartChair.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3F673F50CECEAFBAF4520215 /* Pods-SmartChair.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartChair.release.xcconfig"; path = "Target Support Files/Pods-SmartChair/Pods-SmartChair.release.xcconfig"; sourceTree = "<group>"; };
+		CF01A09C3D5DEE9F512C3A88 /* Pods-SmartChair.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartChair.debug.xcconfig"; path = "Target Support Files/Pods-SmartChair/Pods-SmartChair.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		1FDCDEB52EC57E9800CD6056 /* Exceptions for "SmartChair" folder in "SmartChair" target */ = {
+		1F6EFD542EFBCA7100DA5268 /* Exceptions for "SmartChair" folder in "SmartChair" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -24,7 +48,7 @@
 		1FDCDEA02EC57E9600CD6056 /* SmartChair */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				1FDCDEB52EC57E9800CD6056 /* Exceptions for "SmartChair" folder in "SmartChair" target */,
+				1F6EFD542EFBCA7100DA5268 /* Exceptions for "SmartChair" folder in "SmartChair" target */,
 			);
 			path = SmartChair;
 			sourceTree = "<group>";
@@ -36,6 +60,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				320515379AA98BF063C500EF /* libPods-SmartChair.a in Frameworks */,
+				1F737CF92F5677FE005F07F1 /* UnityFramework.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -47,6 +73,8 @@
 			children = (
 				1FDCDEA02EC57E9600CD6056 /* SmartChair */,
 				1FDCDE9F2EC57E9600CD6056 /* Products */,
+				6FF5381B40DFEC4C1FFD5FD5 /* Pods */,
+				F0D682645C657052235B7547 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,6 +86,24 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		6FF5381B40DFEC4C1FFD5FD5 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				CF01A09C3D5DEE9F512C3A88 /* Pods-SmartChair.debug.xcconfig */,
+				3F673F50CECEAFBAF4520215 /* Pods-SmartChair.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		F0D682645C657052235B7547 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1FA635332F19DB87002EAA87 /* UnityFramework.framework */,
+				397D29DB1815040CBD241333 /* libPods-SmartChair.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -65,9 +111,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1FDCDEB62EC57E9800CD6056 /* Build configuration list for PBXNativeTarget "SmartChair" */;
 			buildPhases = (
+				D2D0356BBAC47A45C7887528 /* [CP] Check Pods Manifest.lock */,
 				1FDCDE9A2EC57E9600CD6056 /* Sources */,
 				1FDCDE9B2EC57E9600CD6056 /* Frameworks */,
 				1FDCDE9C2EC57E9600CD6056 /* Resources */,
+				43CB50C0C3F790A922303246 /* [CP] Copy Pods Resources */,
+				1F737CFB2F5677FF005F07F1 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -77,8 +126,6 @@
 				1FDCDEA02EC57E9600CD6056 /* SmartChair */,
 			);
 			name = SmartChair;
-			packageProductDependencies = (
-			);
 			productName = SmartChair;
 			productReference = 1FDCDE9E2EC57E9600CD6056 /* SmartChair.app */;
 			productType = "com.apple.product-type.application";
@@ -126,6 +173,52 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		43CB50C0C3F790A922303246 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SmartChair/Pods-SmartChair-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SmartChair/Pods-SmartChair-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SmartChair/Pods-SmartChair-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D2D0356BBAC47A45C7887528 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SmartChair-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		1FDCDE9A2EC57E9600CD6056 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -139,27 +232,44 @@
 /* Begin XCBuildConfiguration section */
 		1FDCDEB72EC57E9800CD6056 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CF01A09C3D5DEE9F512C3A88 /* Pods-SmartChair.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2J8GFFK56A;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/MJExtension\"",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SmartChair",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SmartChair/Info.plist;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "蓝牙";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jiachao.flutter.SmartChair;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Libraries",
+				);
+				MARKETING_VERSION = 1.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jiachao.flutter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -167,27 +277,43 @@
 		};
 		1FDCDEB82EC57E9800CD6056 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3F673F50CECEAFBAF4520215 /* Pods-SmartChair.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2J8GFFK56A;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SmartChair",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SmartChair/Info.plist;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "蓝牙";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jiachao.flutter.SmartChair;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Libraries",
+				);
+				MARKETING_VERSION = 1.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jiachao.flutter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

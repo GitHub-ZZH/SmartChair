@@ -7,8 +7,13 @@
 
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
+#import "AppDelegateTools.h"
 
 int main(int argc, char * argv[]) {
+    
+    AppDelegateTools.instance.argv = argv;
+    AppDelegateTools.instance.argc = argc;
+    
     NSString * appDelegateClassName;
     @autoreleasepool {
         // Setup code that might create autoreleased objects goes here.

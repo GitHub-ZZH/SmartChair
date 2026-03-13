@@ -6,6 +6,9 @@
 //
 
 #import "AppDelegate.h"
+#import "AppDelegateTools.h"
+#import "ViewController.h"
+#import "MyBluetoothManager.h"
 
 @interface AppDelegate ()
 
@@ -16,25 +19,46 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    AppDelegateTools.instance.launchOptions = launchOptions;
+    
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    
+    NSUUID *uuid = [MyBluetoothManager sharedInstance].savedUUID;
+    if (uuid) {
+        [ViewController switchToHomeVC:self.window];
+    } else {
+        ViewController *mainVc = [ViewController new];
+        self.window.rootViewController = mainVc;
+    }
+    sleep(2);
+    [self.window makeKeyAndVisible];
+    
+    [self checkAppExpireDate];
+    
     return YES;
 }
 
+- (void)checkAppExpireDate {
+    // 设置过期时间：2026-04-01 00:00:00（北京时间）
+    NSDateComponents *components = [[NSDateComponents alloc] init];
+    components.year  = 2026;
+    components.month = 4;
+    components.day   = 1;
+    components.hour  = 0;
+    components.minute = 0;
+    components.second = 0;
 
-#pragma mark - UISceneSession lifecycle
+    NSCalendar *calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
+    calendar.timeZone = [NSTimeZone timeZoneWithName:@"Asia/Shanghai"];
 
+    NSDate *expireDate = [calendar dateFromComponents:components];
+    NSDate *now = [NSDate date];
 
-- (UISceneConfiguration *)application:(UIApplication *)application configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession options:(UISceneConnectionOptions *)options {
-    // Called when a new scene session is being created.
-    // Use this method to select a configuration to create the new scene with.
-    return [[UISceneConfiguration alloc] initWithName:@"Default Configuration" sessionRole:connectingSceneSession.role];
+    if ([now compare:expireDate] != NSOrderedAscending) {
+        // 已过期 → 崩溃
+        abort();
+    }
 }
-
-
-- (void)application:(UIApplication *)application didDiscardSceneSessions:(NSSet<UISceneSession *> *)sceneSessions {
-    // Called when the user discards a scene session.
-    // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
-    // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
-}
-
 
 @end
