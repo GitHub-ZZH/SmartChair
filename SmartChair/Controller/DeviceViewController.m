@@ -9,17 +9,19 @@
 #import <Masonry/Masonry.h>
 #import "DeviceControlView.h"
 #import "DeviceConnectView.h"
+#import "DeviceMemoryView.h"
 #import "DeviceSettingViewController.h"
 #import "MyBluetoothManager.h"
 #import "BluetoothMessage.h"
 #import "SideViewController.h"
 #import "AppDelegateTools.h"
 #import "TouchPassthroughView.h"
+#import "LanguageManager.h"
 #import <UnityFramework/UnityFramework.h>
+#import "GlobalToast.h"
+#import "GuideManager.h"
 
-
-//#define kMainColor [UIColor colorWithRed:209/255.0 green:124/255.0 blue:74/255.0 alpha:1]
-#define kMainColor [UIColor colorWithRed:200/255.0 green:200/255.0 blue:200/255.0 alpha:1]
+#define kMainColor [UIColor colorWithRed:225/255.0 green:136/255.0 blue:49/255.0 alpha:1]
 
 @interface DeviceViewController ()
 
@@ -34,10 +36,17 @@
 // 设备显示相关
 @property (nonatomic, strong) UIImageView *deviceFullScreenView;
 
+@property(nonatomic, strong) UIButton *buttonSetting;
 @property(nonatomic, strong) UILabel *labelProgress;
 @property(nonatomic, strong) UIView *leftControlView;
 @property(nonatomic, strong) UIView *rightContolView;
 @property(nonatomic, strong) UIView *bottomControlView;
+@property(nonatomic, strong) UIWindow *alertWindow;
+@property(nonatomic, strong) UIView *viewHorizontal;
+@property(nonatomic, strong) UIView *viewHeight;
+@property(nonatomic, strong) UIView *viewBackrest;
+@property(nonatomic, strong) UIView *viewSeat;
+@property(nonatomic, strong) UIView *viewLegrest;
 
 @end
 
@@ -73,7 +82,15 @@
     [self buildMotorList];
     */
     
-    
+    [[GuideManager shared] startMonitor];
+    /* 隐藏
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        [[GuideManager shared] startMonitor];
+        // 🔥 启动立即显示一次
+        [[GuideManager shared] showGuide];
+    });
+     */
 }
 
 - (void)testView
@@ -585,28 +602,47 @@
     self.ufw = ufw;
     
     UIWindow *unityWindow = [self.ufw appController].window;
-//    [unityWindow makeKeyAndVisible];
-//    unityWindow.hidden = NO;
-//    unityWindow.windowLevel = UIWindowLevelNormal;
-//    CGFloat navbarHeight = self.navigationController.navigationBar.frame.size.height;
-//    CGFloat statusHeight = [[UIApplication sharedApplication] statusBarFrame].size.height;
+    //    [unityWindow makeKeyAndVisible];
+    //    unityWindow.hidden = NO;
+    //    unityWindow.windowLevel = UIWindowLevelNormal;
+    //    CGFloat navbarHeight = self.navigationController.navigationBar.frame.size.height;
+    //    CGFloat statusHeight = [[UIApplication sharedApplication] statusBarFrame].size.height;
     CGRect frame = self.view.bounds;
-//    frame.origin.y = navbarHeight+statusHeight;
-//    frame.size.height -= frame.origin.y;
-//    unityWindow.frame = frame;
+    //    frame.origin.y = navbarHeight+statusHeight;
+    //    frame.size.height -= frame.origin.y;
+    //    unityWindow.frame = frame;
     [self.view addSubview:unityWindow];
     
     // 2️⃣ 透明触摸层（顶层）
-//    self.touchView = [[TouchPassthroughView alloc] initWithFrame:self.view.bounds];
-//    self.touchView.backgroundColor = UIColor.clearColor;
-//    [unityWindow addSubview:self.touchView];
-
-    UIButton *settingBtn = [self buttonWithTitle:@"后台设置" tag:0 action:@selector(buttonRightAction)];
+    //    self.touchView = [[TouchPassthroughView alloc] initWithFrame:self.view.bounds];
+    //    self.touchView.backgroundColor = UIColor.clearColor;
+    //    [unityWindow addSubview:self.touchView];
+    CGFloat statusHeight = [[UIApplication sharedApplication] statusBarFrame].size.height;
+    
+    [[LanguageManager shared] setLanguage:@"zh-Hans"];
+    UIButton *settingBtn = [self buttonWithImage:@"chair_setting" tag:0 action:@selector(buttonRightAction)];
     [unityWindow addSubview:settingBtn];
     [settingBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(unityWindow).offset(-10);
-        make.top.equalTo(unityWindow);
-        make.size.mas_equalTo(CGSizeMake(80, 50));
+        make.right.equalTo(unityWindow).offset(-20);
+        make.top.equalTo(unityWindow).offset(20);
+        make.size.mas_equalTo(CGSizeMake(100, 70));
+    }];
+    self.buttonSetting = settingBtn;
+    
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(resetPassword)];
+    longPress.minimumPressDuration = 2;
+    [settingBtn addGestureRecognizer:longPress];
+    
+    [self buildSubview:unityWindow];
+}
+
+- (void)buildSubview:(UIWindow *)unityWindow
+{
+    UIImageView *imageLogo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"chair_logo"]];
+    [unityWindow addSubview:imageLogo];
+    [imageLogo mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.equalTo(unityWindow);
+        make.size.mas_equalTo(CGSizeMake(250*1.4, 130*1.4));
     }];
     
     UILabel *labelProgress = [[UILabel alloc] init];
@@ -614,47 +650,151 @@
     [labelProgress sizeToFit];
     labelProgress.textAlignment = NSTextAlignmentCenter;
     labelProgress.text = @"";
-    labelProgress.textColor = [UIColor whiteColor];
+    labelProgress.textColor = [UIColor colorWithRed:235/255.0 green:160/255.0 blue:60/255.0 alpha:1];
+    labelProgress.font = [UIFont monospacedSystemFontOfSize:28 weight:UIFontWeightBold];
     [labelProgress mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(settingBtn.mas_left).offset(-10);
-        make.top.equalTo(unityWindow);
-        make.size.mas_equalTo(CGSizeMake(120, 50));
+        make.top.equalTo(unityWindow).offset(40);
+        make.centerX.equalTo(unityWindow);
+        make.size.mas_equalTo(CGSizeMake(1000, 50));
     }];
     self.labelProgress = labelProgress;
     
-    UIButton *playBtn = [self buttonWithTitle:@"零重力" tag:SeatKey_ZeroGravityOn action:@selector(playAction:)];
+    UIButton *playBtn = [self buttonWithImage:@"chair_zero" tag:SeatKey_ZeroGravityOn action:@selector(playAction:)];
     [unityWindow addSubview:playBtn];
     [playBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(unityWindow);
-        make.bottom.equalTo(unityWindow);
-        make.size.mas_equalTo(CGSizeMake(60, 50));
+        make.right.equalTo(unityWindow).offset(-20);
+        make.bottom.equalTo(unityWindow).offset(-20);
+        make.size.mas_equalTo(CGSizeMake(100, 80));
     }];
     
-    UIButton *resetBtn = [self buttonWithTitle:@"复位" tag:SeatKey_ZeroGravityReset action:@selector(resetAction:)];
+    UIButton *resetBtn = [self buttonWithImage:@"chair_reset" tag:SeatKey_ZeroGravityReset action:@selector(resetAction:)];
     [unityWindow addSubview:resetBtn];
     [resetBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(playBtn.mas_left).offset(-5);
-        make.bottom.equalTo(unityWindow);
-        make.size.mas_equalTo(CGSizeMake(60, 50));
+        make.right.equalTo(playBtn.mas_left).offset(-10);
+        make.bottom.equalTo(playBtn);
+        make.size.equalTo(playBtn);
     }];
     
-    UIButton *rotationBtn = [self buttonWithTitle:@"可旋转" tag:SeatKey_ZeroGravityReset action:@selector(rotationAction:)];
+    UIButton *rotationBtn = [self buttonWithImage:@"chair_rotation" tag:SeatKey_ZeroGravityReset action:@selector(rotationAction:)];
     [unityWindow addSubview:rotationBtn];
     [rotationBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(resetBtn.mas_left).offset(-5);
-        make.bottom.equalTo(unityWindow);
-        make.size.mas_equalTo(CGSizeMake(60, 50));
+        make.right.equalTo(resetBtn.mas_left).offset(-10);
+        make.bottom.equalTo(playBtn);
+        make.size.equalTo(playBtn);
     }];
     
     [self buildMemoryViewTest:unityWindow];
+    [self buildStatusView:unityWindow];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(onUnityRotation:)
                                                  name:@"UnityRotationCallback"
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(languageChanged:)
+                                                 name:@"languageChangedCallback"
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(zeroOnAction:)
+                                                 name:@"kNotice_ZeroGravityOn"
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(zeroOffAction:)
+                                                 name:@"kNotice_ZeroGravityOff"
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMototList:) name:@"update_motor_list" object:nil];
 }
 
 - (void)buildMemoryViewTest:(UIWindow *)unityWindow
+{
+    DeviceMemoryView *view2 = [[DeviceMemoryView alloc]
+                                initWithFrame:CGRectZero
+                                withMotorID:1
+                               withImageName:@"chair_memory2"
+                                button1:@{@"title":@"Memory", @"tag":@(SeatKey_Memory2Set)}
+                                button2:@{@"title":@"Start", @"tag":@(SeatKey_Memory2Start)}
+                                isRight:NO];
+    [unityWindow addSubview:view2];
+    [view2 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(unityWindow);
+        make.right.equalTo(unityWindow).offset(-20);
+        make.size.mas_equalTo(CGSizeMake(220, 120));
+    }];
+    
+    DeviceMemoryView *view1 = [[DeviceMemoryView alloc]
+                                initWithFrame:CGRectZero
+                                withMotorID:1
+                               withImageName:@"chair_memory1"
+                                button1:@{@"title":@"Memory", @"tag":@(SeatKey_Memory1Set)}
+                                button2:@{@"title":@"Start", @"tag":@(SeatKey_Memory1Start)}
+                                isRight:NO];
+    [unityWindow addSubview:view1];
+    [view1 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(unityWindow).offset(-160);
+        make.right.equalTo(view2);
+        make.size.equalTo(view2);
+    }];
+    
+    DeviceMemoryView *view3 = [[DeviceMemoryView alloc]
+                                initWithFrame:CGRectZero
+                                withMotorID:1
+                               withImageName:@"chair_memory3"
+                                button1:@{@"title":@"Memory", @"tag":@(SeatKey_Memory3Set)}
+                                button2:@{@"title":@"Start", @"tag":@(SeatKey_Memory3Start)}
+                                isRight:NO];
+    [unityWindow addSubview:view3];
+    [view3 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(unityWindow).offset(160);
+        make.right.equalTo(view2);
+        make.size.equalTo(view2);
+    }];
+}
+
+- (void)buildStatusView:(UIWindow *)unityWindow
+{
+    UIView *statusBgView = [[UIView alloc] init];
+    [unityWindow addSubview:statusBgView];
+    [statusBgView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(unityWindow);
+        make.left.equalTo(unityWindow);
+        make.size.mas_equalTo(CGSizeMake(50, 260));
+    }];
+    
+    self.viewHorizontal = [[UIView alloc] init];
+    
+    self.viewHeight = [[UIView alloc] init];
+    
+    self.viewBackrest = [[UIView alloc] init];
+    
+    self.viewSeat = [[UIView alloc] init];
+    
+    self.viewLegrest = [[UIView alloc] init];
+    
+    NSArray *viewArr = @[self.viewHorizontal,
+                         self.viewHeight,
+                         self.viewBackrest,
+                         self.viewSeat,
+                         self.viewLegrest];
+    for (UIView *view in viewArr) {
+        [statusBgView addSubview:view];
+        view.backgroundColor = [UIColor greenColor];
+        view.layer.cornerRadius = 4;
+        view.layer.masksToBounds = YES;
+    }
+    
+    CGFloat dotSize = 8;
+    [viewArr mas_distributeViewsAlongAxis:MASAxisTypeVertical
+                      withFixedItemLength:dotSize
+                              leadSpacing:0
+                              tailSpacing:0];
+    [viewArr mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(statusBgView);
+        make.width.mas_equalTo(dotSize);
+        make.height.mas_equalTo(dotSize);
+    }];
+}
+
+- (void)buildMemoryViewTest222:(UIWindow *)unityWindow
 {
     UIButton *memoryStart1 = [self buttonWithTitle:@"记忆1启动" tag:SeatKey_Memory1Start action:@selector(memoryStartAction:)];
     [unityWindow addSubview:memoryStart1];
@@ -705,6 +845,7 @@
     }];
 }
 
+#pragma mark - Notice
 - (void)onUnityRotation:(NSNotification *)noti
 {
     NSString *jsonString = noti.object;
@@ -731,28 +872,43 @@
         NSMutableDictionary *dictM = [NSMutableDictionary dictionary];
         [dictM setValue:@(progress) forKey:@"progress"];
         
+        NSString *unit = Localized(@"chair_key_unit");
+        int tempProgress = progress;
         NSString *motorName = @"";
         if ([name isEqualToString:@"靠背"]) {
             [dictM setValue:@(MotorIDBackrestForwardBack) forKey:@"motorID"];
-            motorName = @"靠背调节";
+            motorName = Localized(@"chair_key_backrest_adjustment");
+            tempProgress = ceil(progress/100.0*(135-88)+88);
         } else if ([name isEqualToString:@"腿托"]) {
             [dictM setValue:@(MotorIDLegRestUpDown) forKey:@"motorID"];
-            motorName = @"腿托调节";
+            motorName = Localized(@"chair_key_legrest_adjustment");
+            tempProgress = ceil(progress/100.0*(175-105)+105);
         } else if ([name isEqualToString:@"坐盆"]) {
             [dictM setValue:@(MotorIDSeatTilt) forKey:@"motorID"];
-            motorName = @"座盆调节";
+            motorName = Localized(@"chair_key_seat_adjustment");
+            tempProgress = ceil(progress/100.0*(45-15)+15);
         } else if ([name isEqualToString:@"水平调节"]) {
             [dictM setValue:@(MotorIDSeatForwardBackward) forKey:@"motorID"];
-            motorName = @"水平调节";
+            motorName = Localized(@"chair_key_horizontal_adjustment");
+            unit = @"%";
         } else if ([name isEqualToString:@"高度"]) {
             [dictM setValue:@(MotorIDSeatUpDown) forKey:@"motorID"];
-            motorName = @"高度调节";
+            motorName = Localized(@"chair_key_height_adjustment");
+            unit = @"%";
         }
-        if ([name isEqualToString:@"靠背"]) {
-            int ppp = ceil(progress/100.0*(135-88)+88);
-            self.labelProgress.text = [NSString stringWithFormat:@"%@ %d度", motorName, ppp];
+        
+        NSString *progressStr = @"";
+        if (tempProgress >= 100) {
+            progressStr = [NSString stringWithFormat:@"%d",tempProgress];
+        } else if (tempProgress >= 10) {//1个空格
+            progressStr = [NSString stringWithFormat:@" %d",tempProgress];
+        } else {//两个空格
+            progressStr = [NSString stringWithFormat:@"  %d",tempProgress];
+        }
+        if (motorName.length > 0) {
+            self.labelProgress.text = [NSString stringWithFormat:@"%@ %@%@", motorName, progressStr, unit];
         } else {
-            self.labelProgress.text = [NSString stringWithFormat:@"%@ %d%%", motorName, progress];
+            self.labelProgress.text = @"";
         }
         
         NSString *event = jsonDict[@"event"];
@@ -761,6 +917,56 @@
             [[MyBluetoothManager sharedInstance] sendMessageWith:data];
         }
     }
+}
+
+- (void)languageChanged:(NSNotification *)notice
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+//        NSString *language = notice.object;
+//        [self.buttonSetting setTitle:Localized(@"chair_key_background_settings") forState:UIControlStateNormal];
+    });
+}
+
+- (void)updateMototList:(NSNotification *)notice
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray *motorArr = [MyBluetoothManager sharedInstance].allMotorArr;
+        for (MotorModel *temp in motorArr) {
+            UIColor *color = [UIColor redColor];
+            if (temp.status == 0) {
+                color = [UIColor greenColor];
+            } else if (temp.status == 1 || temp.status == 2) {
+                color = [UIColor yellowColor];
+            }
+            if (temp.motorID == 1) {
+                self.viewHorizontal.backgroundColor = color;
+            } else if (temp.motorID == 2) {
+                self.viewHeight.backgroundColor = color;
+            } else if (temp.motorID == 3) {
+                self.viewBackrest.backgroundColor = color;
+            } else if (temp.motorID == 4) {
+                self.viewSeat.backgroundColor = color;
+            } else if (temp.motorID == 5) {
+                self.viewLegrest.backgroundColor = color;
+            }
+        }
+    });
+}
+
+- (void)zeroOnAction:(NSNotification *)notice
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self playAction:nil];
+        NSLog(@"-------------收到通知=====1111111");
+    });
+}
+
+- (void)zeroOffAction:(NSNotification *)notice
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self resetAction:nil];
+        NSLog(@"-------------收到通知=====222222");
+    });
 }
 
 //- (void)viewDidDisappear:(BOOL)animated
@@ -778,9 +984,25 @@
 - (UIButton *)buttonWithTitle:(NSString *)title tag:(NSInteger)tag action:(SEL)action
 {
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
-    btn.backgroundColor = [[UIColor blueColor] colorWithAlphaComponent:0.6];
+//    btn.backgroundColor = [[UIColor blueColor] colorWithAlphaComponent:0.6];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [btn setTitle:title forState:UIControlStateNormal];
+    [btn addTarget:self action:action
+     forControlEvents:UIControlEventTouchUpInside];
+    btn.layer.cornerRadius = 10;
+    btn.layer.borderWidth = 2;
+    btn.layer.borderColor = kMainColor.CGColor;
+    if (tag) {
+        btn.tag = tag;
+    }
+    return btn;
+}
+
+- (UIButton *)buttonWithImage:(NSString *)imageName tag:(NSInteger)tag action:(SEL)action
+{
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    btn.backgroundColor = [[UIColor blueColor] colorWithAlphaComponent:0.6];
+    [btn setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
     [btn addTarget:self action:action
      forControlEvents:UIControlEventTouchUpInside];
     if (tag) {
@@ -788,6 +1010,7 @@
     }
     return btn;
 }
+
 
 - (void)dealloc
 {
@@ -868,6 +1091,16 @@
 }
 
 #pragma mark - Action
+- (void)resetPassword
+{
+    NSLog(@"重置密码");
+    [[NSUserDefaults standardUserDefaults] setObject:@"666666"
+                                              forKey:@"SettingsPassword"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [GlobalToast show:@"密码重置完成。666666"];
+}
+
 - (void)switchAction1:(UISwitch *)sender
 {
     NSData *data = [BluetoothMessage messageWith:SeatKey_SeatbeltWarning pressed:sender.on needSave:YES];
@@ -944,17 +1177,28 @@
 
 - (void)showPasswordAlert {
     
-    [self.navigationController pushViewController:[DeviceSettingViewController new] animated:YES];
-    return;
+//    [self.navigationController pushViewController:[DeviceSettingViewController new] animated:YES];
+//    return;
+    
+    self.alertWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    self.alertWindow.windowLevel = UIWindowLevelAlert + 1;
+    
+    UIViewController *vc = [UIViewController new];
+    self.alertWindow.rootViewController = vc;
+    [self.alertWindow makeKeyAndVisible];
+    
+    UIViewController *unityVC = [self.ufw appController].rootViewController;
     
     UIAlertController *alert =
     [UIAlertController alertControllerWithTitle:@"请输入密码"
-                                        message:@"验证后进入设置"
+                                        message:@"密码为6位数字，验证后进入设置界面"
                                  preferredStyle:UIAlertControllerStyleAlert];
 
     [alert addTextFieldWithConfigurationHandler:^(UITextField *tf) {
-        tf.secureTextEntry = YES;
+//        tf.secureTextEntry = YES;
         tf.placeholder = @"密码";
+        tf.keyboardType = UIKeyboardTypeNumberPad;
+        tf.returnKeyType = UIReturnKeyDone;
     }];
 
     __weak typeof(self) weakSelf = self;
@@ -963,7 +1207,9 @@
     [UIAlertAction actionWithTitle:@"确认"
                              style:UIAlertActionStyleDefault
                            handler:^(UIAlertAction *action) {
-
+        NSLog(@"---------------222222222");
+        [self dismissAlertWindow];
+        
         NSString *input = alert.textFields.firstObject.text;
         NSString *saved = [weakSelf loadPassword];
 
@@ -972,15 +1218,19 @@
             [weakSelf.navigationController pushViewController:[DeviceSettingViewController new] animated:YES];
         } else {
 //            [weakSelf showError:@"密码错误"];
+            [GlobalToast show:@"密码错误"];
         }
     }];
 
     [alert addAction:confirm];
     [alert addAction:[UIAlertAction actionWithTitle:@"取消"
                                               style:UIAlertActionStyleCancel
-                                            handler:nil]];
+                                            handler:^(UIAlertAction *action) {
+        NSLog(@"---------------11111111");
+        [self dismissAlertWindow];
+    }]];
 
-    [self presentViewController:alert animated:YES completion:nil];
+    [vc presentViewController:alert animated:YES completion:nil];
 }
 
 // 读取密码
@@ -991,6 +1241,12 @@
         return @"888888";
     }
     return password;
+}
+
+- (void)dismissAlertWindow
+{
+    self.alertWindow.hidden = YES;
+    self.alertWindow = nil;
 }
 
 UnityFramework* UnityFrameworkLoad()

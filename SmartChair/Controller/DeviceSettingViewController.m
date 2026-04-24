@@ -11,6 +11,8 @@
 #import "MyBluetoothManager.h"
 #import "BluetoothMessage.h"
 #import "ViewController.h"
+#import "LanguageManager.h"
+#import "GlobalToast.h"
 
 @interface DeviceSettingViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -27,10 +29,11 @@
     
     self.view.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
     
+    NSArray *tempArr = @[@(1), @(2), @(3), @(4), @(5)];
     self.arrList = [NSMutableArray array];
-    for (int i = 1; i < 10; i++) {
+    for (int i = 0; i < tempArr.count; i++) {
         MotorModel *model = [[MotorModel alloc] init];
-        model.motorID = i;
+        model.motorID = [tempArr[i] intValue];
         [self.arrList addObject:model];
     }
     
@@ -84,7 +87,7 @@
     if (section == 0) {
         return self.arrList.count;
     }
-    return 3;
+    return 5;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -108,18 +111,32 @@
     } else {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell"];
         if (!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"UITableViewCell"];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"UITableViewCell"];
         }
-//        cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"chair_selected"]];
+        cell.accessoryView = nil;
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.detailTextLabel.text = @"";
         if (indexPath.row == 0) {
             cell.textLabel.text = @"参数设置";
         } else if (indexPath.row == 1) {
             cell.textLabel.text = @"重新配对";
         } else if (indexPath.row == 2) {
             cell.textLabel.text = @"修改密码";
-        } else if (indexPath.row == 2) {
-            cell.textLabel.text = @"xxxx";
+        } else if (indexPath.row == 3) {
+            cell.textLabel.text = @"中英文切换";
+            cell.detailTextLabel.text = @"中文";
+            if ([[[LanguageManager shared] getLanguage] isEqualToString:@"en"]) {
+                cell.detailTextLabel.text = @"英文";
+            }
+        } else if (indexPath.row == 4) {
+            cell.textLabel.text = @"零重力自动运行";
+            
+            BOOL isOpen = [[NSUserDefaults standardUserDefaults] boolForKey:@"zeroAutoPlay"];
+            
+            UISwitch *switchButton = [[UISwitch alloc] init];
+            switchButton.on = isOpen;
+            [switchButton addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
+            cell.accessoryView = switchButton;
         }
         
         return cell;
@@ -147,13 +164,13 @@
         UILabel *label = [[UILabel alloc] init];
         [headerView addSubview:label];
         label.textColor = [UIColor lightGrayColor];
-        label.text = @"以下电机将在主页显示";
+        label.text = @"自学习电机列表";
         if (section == 1) {
             label.text = @"其他功能";
         }
         [label mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(headerView).offset(16);
-            make.left.equalTo(headerView).offset(50);
+            make.left.equalTo(headerView).offset(20);
             make.bottom.right.equalTo(headerView);
         }];
         
@@ -179,7 +196,14 @@
         } else if (indexPath.row == 2) {
             [self changePassword];
         } else if (indexPath.row == 3) {
-            
+            if ([[[LanguageManager shared] getLanguage] isEqualToString:@"en"]) {
+                [[LanguageManager shared] setLanguage:@"zh-Hans"];
+            } else {
+                [[LanguageManager shared] setLanguage:@"en"];
+            }
+            [GlobalToast show:@"切换成功"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"languageChangedCallback" object:nil];
+            [tableView reloadData];
         }
     }
 }
@@ -196,6 +220,14 @@
     
     NSData *data = [BluetoothMessage messageWith:36 pressed:YES needSave:NO];
     [[MyBluetoothManager sharedInstance] sendMessageWith:data];
+}
+
+- (void)switchAction:(UISwitch *)sender
+{
+    BOOL isOpen = sender.on;
+    NSLog(@"===========结果==%d",isOpen);
+    [[NSUserDefaults standardUserDefaults] setBool:isOpen forKey:@"zeroAutoPlay"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 #pragma mark -
@@ -271,7 +303,7 @@
 - (void)changePassword {
     UIAlertController *alert =
     [UIAlertController alertControllerWithTitle:@"修改密码"
-                                        message:nil
+                                        message:@"请输入6位数字"
                                  preferredStyle:UIAlertControllerStyleAlert];
 
 //    [alert addTextFieldWithConfigurationHandler:^(UITextField *tf) {
@@ -281,7 +313,8 @@
 
     [alert addTextFieldWithConfigurationHandler:^(UITextField *tf) {
         tf.placeholder = @"新密码";
-        tf.secureTextEntry = YES;
+//        tf.secureTextEntry = YES;
+        tf.keyboardType = UIKeyboardTypeNumberPad;
     }];
 
     UIAlertAction *confirm =
@@ -316,6 +349,8 @@
     [[NSUserDefaults standardUserDefaults] setObject:password
                                               forKey:@"SettingsPassword"];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [GlobalToast show:[NSString stringWithFormat:@"修改成功：%@",password]];
 }
 
 - (void)packageDataToSend:(NSString *)dataStr

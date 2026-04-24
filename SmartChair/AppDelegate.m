@@ -31,7 +31,7 @@
         ViewController *mainVc = [ViewController new];
         self.window.rootViewController = mainVc;
     }
-    sleep(2);
+    sleep(1);
     [self.window makeKeyAndVisible];
     
     [self checkAppExpireDate];
@@ -42,10 +42,10 @@
 - (void)checkAppExpireDate {
     // 设置过期时间：2026-04-01 00:00:00（北京时间）
     NSDateComponents *components = [[NSDateComponents alloc] init];
-    components.year  = 2026;
+    components.year  = 2027;
     components.month = 4;
     components.day   = 1;
-    components.hour  = 0;
+    components.hour  = 12;
     components.minute = 0;
     components.second = 0;
 

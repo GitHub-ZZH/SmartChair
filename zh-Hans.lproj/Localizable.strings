@@ -1,0 +1,22 @@
+/* 
+  Localizable.strings
+  SmartChair
+
+  Created by 张志恒 on 2026/3/13.
+  
+*/
+
+"chair_key_other_functions" = "其他功能";
+"chair_key_backrest_adjustment" = "靠背调节";
+"chair_key_legrest_adjustment" = "腿托调节";
+"chair_key_seat_adjustment" = "座盆调节";
+"chair_key_horizontal_adjustment" = "水平调节";
+"chair_key_height_adjustment" = "高度调节";
+"chair_key_background_settings" = "后台设置";
+"chair_key_one_click_self_learning" = "一键自学习";
+"chair_key_parameter_settings" = "参数设置";
+"chair_key_unit" = "度";
+"chair_key_repair" = "重新配对";
+"chair_key_change_password" = "修改密码";
+"chair_key_language_switch" = "中英文切换";
+"chair_key_self_learning_motor_list" = "自学习电机列表";

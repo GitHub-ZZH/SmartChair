@@ -141,7 +141,11 @@
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central {
     NSLog(@"蓝牙状态。。。。。%ld",central.state);
     
-    
+    if (central.state == CBManagerStatePoweredOn) {
+        if (self.savedUUID) {
+            [self connectDeviceWithUUID:_savedUUID];
+        }
+    }
 }
 
 - (void)centralManager:(CBCentralManager *)central
@@ -205,7 +209,8 @@
     NSLog(@"设备断开连接");
 
     // 自动重连
-//    [self startScan];
+    [self.centralManager connectPeripheral:peripheral options:nil];
+    [self startScan];
 }
 
 - (void)peripheralDidUpdateName:(CBPeripheral *)peripheral

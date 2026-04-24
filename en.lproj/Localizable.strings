@@ -1,0 +1,22 @@
+/* 
+  Localizable.strings
+  SmartChair
+
+  Created by 张志恒 on 2026/3/13.
+  
+*/
+
+"chair_key_other_functions" = "Other Functions";
+"chair_key_backrest_adjustment" = "Recliner Gearmotor";
+"chair_key_legrest_adjustment" = "Leg Support Motor";
+"chair_key_seat_adjustment" = "Tilt Adjuster Motor";
+"chair_key_horizontal_adjustment" = "Length Adjuster Motor";
+"chair_key_height_adjustment" = "Height Adjuster Gearmotor";
+"chair_key_background_settings" = "Background Settings";
+"chair_key_one_click_self_learning" = "One-Click Self Learning";
+"chair_key_parameter_settings" = "Parameter Settings";
+"chair_key_unit" = "Degrees";
+"chair_key_repair" = "Repair";
+"chair_key_change_password" = "Change Password";
+"chair_key_language_switch" = "Language Switch";
+"chair_key_self_learning_motor_list" = "Self-Learning Motor List";

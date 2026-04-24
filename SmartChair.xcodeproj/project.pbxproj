@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1F737CF92F5677FE005F07F1 /* UnityFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FA635332F19DB87002EAA87 /* UnityFramework.framework */; };
 		1F737CFA2F5677FE005F07F1 /* UnityFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1FA635332F19DB87002EAA87 /* UnityFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1F7DC9632F640DF9004F2A05 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1F7DC9612F640DF9004F2A05 /* Localizable.strings */; };
 		320515379AA98BF063C500EF /* libPods-SmartChair.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 397D29DB1815040CBD241333 /* libPods-SmartChair.a */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +28,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1F7DC9622F640DF9004F2A05 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1F7DC9642F640E11004F2A05 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		1FA635332F19DB87002EAA87 /* UnityFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UnityFramework.framework; sourceTree = "<group>"; };
 		1FDCDE9E2EC57E9600CD6056 /* SmartChair.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmartChair.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		397D29DB1815040CBD241333 /* libPods-SmartChair.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SmartChair.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -71,6 +74,7 @@
 		1FDCDE952EC57E9600CD6056 = {
 			isa = PBXGroup;
 			children = (
+				1F7DC9612F640DF9004F2A05 /* Localizable.strings */,
 				1FDCDEA02EC57E9600CD6056 /* SmartChair */,
 				1FDCDE9F2EC57E9600CD6056 /* Products */,
 				6FF5381B40DFEC4C1FFD5FD5 /* Pods */,
@@ -150,6 +154,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 1FDCDE952EC57E9600CD6056;
 			minimizedProjectReferenceProxies = 1;
@@ -168,6 +173,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F7DC9632F640DF9004F2A05 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,6 +235,18 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXVariantGroup section */
+		1F7DC9612F640DF9004F2A05 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1F7DC9622F640DF9004F2A05 /* en */,
+				1F7DC9642F640E11004F2A05 /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		1FDCDEB72EC57E9800CD6056 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -264,7 +282,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Libraries",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.1.9;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jiachao.flutter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -308,7 +326,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Libraries",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.1.9;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jiachao.flutter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -324,6 +342,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -386,6 +405,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";

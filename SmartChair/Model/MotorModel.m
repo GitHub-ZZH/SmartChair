@@ -12,18 +12,18 @@
 + (NSString *)nameDescription:(NSInteger)motorID
 {
     switch (motorID) {
-        case 1:     return @"座垫前后";
-        case 2:     return @"座垫上下";
-        case 3:     return @"靠背前后";
-        case 4:     return @"座垫倾斜";
-        case 5:     return @"腿托高低";
-        case 6:     return @"腰部上下";
-        case 7:     return @"腰部左右";
-        case 8:     return @"腿托伸缩";
-        case 9:     return @"头枕上下";
-        case 10:    return @"安全带预警";
-        case 11:    return @"背部按摩";
-        case 12:    return @"座椅通风";
+        case 1:     return @"水平调节";
+        case 2:     return @"高度调节";
+        case 3:     return @"靠背调节";
+        case 4:     return @"座盆调节";
+        case 5:     return @"腿托调节";
+        case 6:     return @"腰托调节";
+        case 7:     return @"腰部左右";//无
+        case 8:     return @"腿托伸缩";//无
+        case 9:     return @"头枕调节";
+        case 10:    return @"安全带";
+        case 11:    return @"背部按摩";//无
+        case 12:    return @"座椅通风";//无
         case 101:   return @"记忆1";
         case 102:   return @"记忆2";
         case 103:   return @"记忆3";
